@@ -44,3 +44,30 @@ ADD CONSTRAINT department_id
         REFERENCES department (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION;
+
+INSERT INTO department
+(name) VALUES 
+("IT"),
+("Accounting"),
+("Finance"),
+("Marketing"),
+("Business"),
+("Operations");
+
+INSERT INTO role
+(title, salary, department_id) VALUES 
+("CTO", 100000, 1),
+("CPA", 80000, 2),
+("CFO", 90000, 3),
+("CMO", 70000, 4),
+("CEO", 120000, 5),
+("COO", 110000, 6);
+
+INSERT INTO employee
+(first_name, last_name, role_id, manager_id) VALUES
+("Justin", "Young", 5,null),
+("Jacob", "Doe", 2,1),
+("Jane", "Boe", 3, 1),
+("Jackie", "Brown", 2,3),
+("John", "Johnson", 1, 1),
+("Steven", "Smith", 6, 1);

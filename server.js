@@ -7,10 +7,12 @@ const Department = require("./lib/Department.js");
 
 // Global Variables
 let employee = new Employee(DB);
+let role = new Role(DB);
+let department = new Department(DB);
 
 
 // This function manages the flow of the application
-function init(){
+function init() {
 
     start();
 }
@@ -18,7 +20,7 @@ function init(){
 function start() {
     let question = "What would you like to do?";
     let options = [
-        "View All Employees", 
+        "View All Employees",
         "View All Employees By Department",
         "View All Employees By Manager",
         "Add Employee",
@@ -41,10 +43,23 @@ function start() {
             message: question,
             choices: options
         }
-    ).then((data) =>{
-        switch(data.action){
+    ).then((data) => {
+        switch (data.action) {
             case "View All Employees":
-                viewAllEmployees();
+                employee.selectEmployees();
+                start();
+                break;
+            case "View All Roles":
+                role.selectRoles();
+                start();
+                break;
+            case "View All Departments":
+                department.selectDepartments();
+                start();
+                break;
+            case "Add Employee":
+                addEmployee();
+                start();
                 break;
             case "Exit":
                 console.log("Thank you for using our HR Employee Tracker. Have a great day.");
@@ -57,15 +72,57 @@ function start() {
     });
 }
 
-// This function will display a list of all employees
-function viewAllEmployees(){
+// This function will handle the add employee requests
+function addEmployee(){
+    let questions = [
+        "What is employee's first name?",
+        "What is employee's last name?",
+        "What is employee's role?",
+        "Who is employee's manager?"];
+    let roles = role.selectRoles();
     let employees = employee.selectEmployees();
+    let roleOptions = [];
+    let managerOptions = [];
+    for (let i=0; i< roles.length; i++){
+        roleOptions.push(roles[i].title);
+    }
+    roleOptions.push("No Role (Free-Loader)");
+    for (let i=0; i< employees.length; i++){
+        managerOptions.push(employees[i].first_name+" "+employees[i].last_name);
+    }
+    managerOptions.push("No Manager");
     
+    Inquirer.prompt(
+        {
+            name: "firstName",
+            type: "input",
+            message: questions[0]
+        },
+        {
+            name: "lastName",
+            type: "input",
+            message: questions[1]
+        },
+        {
+            name:"role",
+            type:"list",
+            message:question[2],
+            choices:roleOptions
+        },
+        {
+            name:"manager",
+            type:"list",
+            message:question[3],
+            choices: managerOptions
+        }
+    ).then((data) => {
+        console.log(data);
+    });
 }
 
 // // This function retrieves the employee data
 // function gatherInformation() {
-    
+
 //     let prompts = preparePrompts(nextEmployee);
 
 //     let p1 = inquirer.prompt(prompts).then((data) => {
@@ -141,14 +198,14 @@ function viewAllEmployees(){
 //         } else {
 //             console.log(`Successfully generated ${OUTPUT_PATH}!`);
 //         }
-    
+
 //     console.log(employee.logHeader());
 //     console.log(employees);
 // }
 
 // // This function retrieves the employee data
 // function gatherInformation() {
-    
+
 //     let prompts = preparePrompts(nextEmployee);
 
 //     let p1 = inquirer.prompt(prompts).then((data) => {
