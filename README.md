@@ -44,5 +44,5 @@ You can find more of my work at [My Github Repo](https://github.com/JYoung7223 "
 ## Sample
 Deployed project can be found at: localhost Deployable Only
 
-Below is a sample screenshot:
-![Project Sample](https://youtu.be/oLZcnyK-EpE "Project Sample")
+Below is a sample video:
+[Project Sample](https://youtu.be/oLZcnyK-EpE "Project Sample")
