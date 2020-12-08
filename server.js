@@ -11,11 +11,6 @@ let role = new Role(DB);
 let department = new Department(DB);
 
 
-// This function manages the flow of the application
-function init() {
-
-    start();
-}
 // This is the entry point of the user interface
 function start() {
     let question = "What would you like to do?";
@@ -57,9 +52,8 @@ function start() {
                 department.selectDepartments();
                 start();
                 break;
-            case "Add Employee":
-                addEmployee();
-                start();
+            case "Add Department":
+                addDepartment();
                 break;
             case "Exit":
                 console.log("Thank you for using our HR Employee Tracker. Have a great day.");
@@ -72,6 +66,35 @@ function start() {
     });
 }
 
+// This function will handle adding a department
+function addDepartment(){
+    let question = "What department would you like to add?";
+    Inquirer.prompt(
+        {
+            name: "department",
+            type: "input",
+            message: question            
+        }
+    ).then((data) => {
+        department.insertDepartment(data.department);
+        start();
+    });
+}
+// This function will handle adding a role
+function addDepartment(){
+    let question = "What department would you like to add?";
+    Inquirer.prompt(
+        {
+            name: "department",
+            type: "input",
+            message: question            
+        }
+    ).then((data) => {
+        department.insertDepartment(data.department);
+        start();
+    });
+}
+
 // This function will handle the add employee requests
 function addEmployee(){
     let questions = [
@@ -79,6 +102,7 @@ function addEmployee(){
         "What is employee's last name?",
         "What is employee's role?",
         "Who is employee's manager?"];
+    
     let roles = role.selectRoles();
     let employees = employee.selectEmployees();
     let roleOptions = [];
@@ -91,7 +115,7 @@ function addEmployee(){
         managerOptions.push(employees[i].first_name+" "+employees[i].last_name);
     }
     managerOptions.push("No Manager");
-    
+   
     Inquirer.prompt(
         {
             name: "firstName",
@@ -120,168 +144,4 @@ function addEmployee(){
     });
 }
 
-// // This function retrieves the employee data
-// function gatherInformation() {
-
-//     let prompts = preparePrompts(nextEmployee);
-
-//     let p1 = inquirer.prompt(prompts).then((data) => {
-//         // Store results in employee object
-//         let lastEmployee = employees[employees.length - 1];
-//         lastEmployee.setProperties(data);
-
-//         // prepare for next round
-//         nextEmployee = data.nextRole.toLowerCase();
-//         if (nextEmployee !== "done") {
-//             gatherInformation();
-//         } else {
-//             console.log(`Writing ${employees.length-1} employees data to file ${OUTPUT_PATH}`);
-//             console.log(employees);
-//             writeHTML(render(employees));
-//         }
-//     }).catch((error) => {
-//         console.log(`Error:${error}`)
-//     });
-// }
-
-// // This function will prepare the array of prompt objects based on role given
-// function preparePrompts(role) {
-//     let prompts = [];
-//     let questions = [];
-//     let employee;
-//     switch (role.toLowerCase()) {
-//         case "manager":
-//             employee = new Manager();
-//             break;
-//         case "intern":
-//             employee = new Intern();
-//             break;
-//         case "engineer":
-//             employee = new Engineer();
-//             break;
-//         default:
-//             console.log(`Unrecognized role (${role})`);
-//             return;
-//     }
-//     // Store with all employees
-//     employees.push(employee);
-//     // Get role specific questions
-//     questions = employee.getQuestions();
-//     // Prepare prompts for role specific items
-//     questions.forEach((q) => {
-//         prompts.push({
-//             name: q[0],
-//             type: "input",
-//             message: q[1]
-//         });
-//     });
-//     // Add Universal prompt
-//     prompts.push({
-//         name: "nextRole",
-//         type: "list",
-//         message: "Which type of team member would you like to add:",
-//         choices: ["Manager", "Engineer", "Intern", "Done"]
-//     });
-
-//     return prompts;
-// }
-
-// // This function will write the given data to the file location given
-// function writeHTML(data){
-//     // Check if path exists
-//     if(!fs.existsSync(OUTPUT_DIR)){
-//         fs.mkdirSync(OUTPUT_DIR, {recursive: true});
-//     }
-//     fs.writeFile(OUTPUT_PATH, data, (err) => {
-//         if (err) {
-//             console.log(`Error:${err}`);
-//         } else {
-//             console.log(`Successfully generated ${OUTPUT_PATH}!`);
-//         }
-
-//     console.log(employee.logHeader());
-//     console.log(employees);
-// }
-
-// // This function retrieves the employee data
-// function gatherInformation() {
-
-//     let prompts = preparePrompts(nextEmployee);
-
-//     let p1 = inquirer.prompt(prompts).then((data) => {
-//         // Store results in employee object
-//         let lastEmployee = employees[employees.length - 1];
-//         lastEmployee.setProperties(data);
-
-//         // prepare for next round
-//         nextEmployee = data.nextRole.toLowerCase();
-//         if (nextEmployee !== "done") {
-//             gatherInformation();
-//         } else {
-//             console.log(`Writing ${employees.length-1} employees data to file ${OUTPUT_PATH}`);
-//             console.log(employees);
-//             writeHTML(render(employees));
-//         }
-//     }).catch((error) => {
-//         console.log(`Error:${error}`)
-//     });
-// }
-
-// // This function will prepare the array of prompt objects based on role given
-// function preparePrompts(role) {
-//     let prompts = [];
-//     let questions = [];
-//     let employee;
-//     switch (role.toLowerCase()) {
-//         case "manager":
-//             employee = new Manager();
-//             break;
-//         case "intern":
-//             employee = new Intern();
-//             break;
-//         case "engineer":
-//             employee = new Engineer();
-//             break;
-//         default:
-//             console.log(`Unrecognized role (${role})`);
-//             return;
-//     }
-//     // Store with all employees
-//     employees.push(employee);
-//     // Get role specific questions
-//     questions = employee.getQuestions();
-//     // Prepare prompts for role specific items
-//     questions.forEach((q) => {
-//         prompts.push({
-//             name: q[0],
-//             type: "input",
-//             message: q[1]
-//         });
-//     });
-//     // Add Universal prompt
-//     prompts.push({
-//         name: "nextRole",
-//         type: "list",
-//         message: "Which type of team member would you like to add:",
-//         choices: ["Manager", "Engineer", "Intern", "Done"]
-//     });
-
-//     return prompts;
-// }
-
-// // This function will write the given data to the file location given
-// function writeHTML(data){
-//     // Check if path exists
-//     if(!fs.existsSync(OUTPUT_DIR)){
-//         fs.mkdirSync(OUTPUT_DIR, {recursive: true});
-//     }
-//     fs.writeFile(OUTPUT_PATH, data, (err) => {
-//         if (err) {
-//             console.log(`Error:${err}`);
-//         } else {
-//             console.log(`Successfully generated ${OUTPUT_PATH}!`);
-//         }
-//     });
-// }
-
-init();
+start();
